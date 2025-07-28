@@ -5,8 +5,12 @@
 
 use std::thread;
 
-pub fn sum(v: Vec<i32>) -> i32 {
-    todo!()
+pub fn sum(mut v: Vec<i32>) -> i32 {
+    let mid = v.len() / 2;
+    let (v1, v2) = v.leak().split_at(mid);
+    let h1 = thread::spawn(|| v1.iter().sum::<i32>());
+    let h2 = thread::spawn(|| v2.iter().sum::<i32>());
+    h1.join().unwrap() + h2.join().unwrap()
 }
 
 #[cfg(test)]
